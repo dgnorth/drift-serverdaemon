@@ -18,7 +18,7 @@ You should treat your battleserver instances as ephemeral and not do any custom 
 
 Launching instances takes around 10-20 minutes, depending on the location of the ec2 (much longer on ap-southeast-1 for example) and you can monitor the progress by running `launch.py [product] --list`. Once the `drift status` column has reached *ready* state the daemon will start to heartbeat against all tenants on the product that are configured to use the specified *group*.
 
-# Deploying new server-daemon code
+## Deploying new server-daemon code
 One of the scheduled tasks that are running every minute will check for, and install new drift-serverdaemon versions if available.
  - If you want to update the serverdaemon you can 'quickdeploy' it from your local machine by running `setup.py sdist --formats=zip deploy`
  - This will upload a zip file containing a new version to S3 and within a minute all ec2's should download and install it.
