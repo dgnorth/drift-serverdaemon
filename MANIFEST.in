@@ -1,0 +1,10 @@
+recursive-include config *
+recursive-include scripts *
+include setup.py
+include check_status.py
+include update_daemon.py
+include run.py
+include requirements.txt
+include VERSION
+include *.ps1
+include *.md

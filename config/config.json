@@ -1,0 +1,7 @@
+{
+    "storage-drive": "C",
+    "default_region": "us-west-1",
+    "command-line": [
+        "-logcmds=\"LogMaterialParameter Warning\""
+    ]
+}
