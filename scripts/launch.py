@@ -15,7 +15,7 @@ except ImportError:
     print "Failed to import libraries. Please run pip install -r requirements.txt"
     sys.exit(1)
 
-WINDOWS_BASE_IMAGE_NAME = 'Windows_Server-2016-English-Full-Base-*'
+#WINDOWS_BASE_IMAGE_NAME = 'Windows_Server-2016-English-Full-Base-*'
 WINDOWS_BASE_IMAGE_NAME = 'Windows_Server-2012-R2_RTM-English-64Bit-Base-*'
 AMI_OWNER_CANONICAL = 'amazon'
 
