@@ -60,7 +60,7 @@ def add_ref_task(scheduler, ref):
     action_workdir = ROOT_PATH
     author = getpass.getuser()
     description = "Automatically created task from Drift Config"
-    task_id = action_id
+    task_id = action_id.replace('/', '_')
 
     TASK_CREATE_OR_UPDATE = 6
     TASK_ACTION_EXEC = 0
