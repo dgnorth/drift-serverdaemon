@@ -26,8 +26,6 @@ SERVICE_NAME = 'ue4server'
 REGION_CHOICES = ['eu-west-1', 'ap-southeast-1', 'us-west-1']
 INSTANCE_TYPE_CHOICES = ['t2.small', 't2.medium', 'c4.large', 'c4.xlarge']
 
-TIER_NAME = 'DEVNORTH' #!
-
 product_name = None
 
 def fold_tags(tags):
@@ -65,7 +63,7 @@ def find_security_groups(ec2):
     ret = list(ec2.security_groups.filter(Filters=filterize(filters)))
     return ret
 
-def launch_instance(group_name, region_name, instance_type):
+def launch_instance(tier_name, group_name, region_name, instance_type):
 
     key_name = 'ue4server-%s' % region_name[:-2]
 
@@ -145,9 +143,9 @@ def launch_instance(group_name, region_name, instance_type):
         sys.exit(1)
 
     tags = {
-        'Name': '{}-{}-{}'.format(TIER_NAME, SERVICE_NAME, product_name),
+        'Name': '{}-{}-{}'.format(tier_name, SERVICE_NAME, product_name),
         'service-name': SERVICE_NAME,
-        'tier': TIER_NAME,
+        'tier': tier_name,
         'drift-group_name': group_name,
         'drift-product_name': product_name,
         'drift-status': 'launching',
@@ -267,9 +265,10 @@ def main():
 
     subparsers = parser.add_subparsers(help='sub-command help', dest="cmd")
     parser_launch = subparsers.add_parser('launch', help='Launch a new battleserver machine')
+    parser_launch.add_argument("-t", "--tier", required=True, help='Name of the tier managing this machine')
     parser_launch.add_argument("-g", "--group", required=True, help='Name of the group which runs on this machine')
     parser_launch.add_argument("-r", "--region", required=True, help='Amazon region to launch the instance in', choices=REGION_CHOICES)
-    parser_launch.add_argument("-i", "--instancetype", required=True, help='Amazon region to launch the instance in', choices=INSTANCE_TYPE_CHOICES)
+    parser_launch.add_argument("-i", "--instancetype", required=True, help='EC2 instance type to launch', choices=INSTANCE_TYPE_CHOICES)
 
     parser_list = subparsers.add_parser('list', help='List battleserver machines')
     parser_list.add_argument("-g", "--group", required=False, help='Name of the group to filter on')
@@ -291,7 +290,7 @@ def main():
     product_name = args.product
 
     if args.cmd == 'launch':
-        launch_instance(args.group, args.region, args.instancetype)
+        launch_instance(args.tier, args.group, args.region, args.instancetype)
     elif args.cmd == 'list':
         list_instances(args.group, args.region, state=args.state)
     elif args.cmd == 'terminate':
