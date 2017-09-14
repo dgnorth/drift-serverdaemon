@@ -101,8 +101,8 @@ def update_tasks():
 
     actual_refs = get_run_tasks(scheduler)
     wanted_refs = get_local_refs()
-    print "Currently installed refs: %s" % ", ".join([r[0] + r[1] for r in actual_refs])
-    print "I want to run the following refs: %s" % ", ".join([r[0] + r[1] for r in wanted_refs])
+    print "Currently installed refs: %s" % ", ".join(["%s:%s" % (r[0], r[1]) for r in actual_refs])
+    print "I want to run the following refs: %s" % ", ".join(["%s:%s" % (r[0], r[1]) for r in wanted_refs])
     if actual_refs == wanted_refs:
         logger.info('Wanted refs match installed refs. Nothing to do.')
         sys.exit(0)
