@@ -1,3 +1,9 @@
+[CmdletBinding()]
+Param(
+  [Parameter(Mandatory=$True,Position=1)]
+  [string]$domainUrl
+)
+
 # remember to use: Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Scope CurrentUser
 
 $instanceId = (New-Object System.Net.WebClient).DownloadString("http://169.254.169.254/latest/meta-data/instance-id")
@@ -103,7 +109,7 @@ $newTag.Value = "install_driftconfig"
 New-EC2Tag -Resource $instanceId -Tag $newTag
 
 Write-Output 'Initializing Drift Config'
-Start-Process "c:\python27\scripts\driftconfig.exe" -Wait -ArgumentList ("init s3://relib-test/directive-games")
+Start-Process "c:\python27\scripts\driftconfig.exe" -Wait -ArgumentList ("init $domainUrl")
 
 
 Write-Output 'All Done'

@@ -38,7 +38,7 @@ $newTag.Value = "install_prerequisites"
 New-EC2Tag -Resource $instanceId -Tag $newTag
 
 Write-Output '*** Executing install_redist'
-Invoke-Expression -Command $finalfolder'\scripts\install_redist.ps1'
+Invoke-Expression -Command $finalfolder'\scripts\install_redist.ps1 -domainUrl %domain_url%'
 
 $newTag = New-Object Amazon.EC2.Model.Tag
 $newTag.Key = "drift-status"

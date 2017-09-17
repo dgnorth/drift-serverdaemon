@@ -63,7 +63,7 @@ def find_security_groups(ec2):
     ret = list(ec2.security_groups.filter(Filters=filterize(filters)))
     return ret
 
-def launch_instance(tier_name, group_name, region_name, instance_type):
+def launch_instance(tier_name, group_name, region_name, instance_type, domain_url):
 
     key_name = 'ue4server-%s' % region_name[:-2]
 
@@ -101,6 +101,8 @@ def launch_instance(tier_name, group_name, region_name, instance_type):
     user_data = ""
     with open("userdata.txt", "r") as f:
         user_data = f.read()
+
+    user_data = user_data.replace('%domain_url%', domain_url)
 
     instances = ec2.create_instances(
         DryRun=False,
@@ -269,6 +271,7 @@ def main():
     parser_launch.add_argument("-g", "--group", required=True, help='Name of the group which runs on this machine')
     parser_launch.add_argument("-r", "--region", required=True, help='Amazon region to launch the instance in', choices=REGION_CHOICES)
     parser_launch.add_argument("-i", "--instancetype", required=True, help='EC2 instance type to launch', choices=INSTANCE_TYPE_CHOICES)
+    parser_launch.add_argument("-u", "--domain-url", required=True, help='Domain configuration URL to use')
 
     parser_list = subparsers.add_parser('list', help='List battleserver machines')
     parser_list.add_argument("-g", "--group", required=False, help='Name of the group to filter on')
@@ -290,7 +293,7 @@ def main():
     product_name = args.product
 
     if args.cmd == 'launch':
-        launch_instance(args.tier, args.group, args.region, args.instancetype)
+        launch_instance(args.tier, args.group, args.region, args.instancetype, args.domain_url)
     elif args.cmd == 'list':
         list_instances(args.group, args.region, state=args.state)
     elif args.cmd == 'terminate':
