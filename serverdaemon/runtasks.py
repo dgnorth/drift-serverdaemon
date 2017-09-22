@@ -88,6 +88,7 @@ def add_ref_task(scheduler, ref):
     settings = taskDef.Settings
     settings.Enabled = True
     settings.Hidden = False
+    settings.ExecutionTimeLimit = 'PT0S'    # PT0S means run forever
     result = rootFolder.RegisterTaskDefinition(task_id, taskDef, TASK_CREATE_OR_UPDATE, "", "", TASK_RUN_NO_FLAGS)
 
     # start the task immediately
