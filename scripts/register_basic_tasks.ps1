@@ -1,9 +1,14 @@
+[CmdletBinding()]
+Param(
+  [Parameter(Mandatory=$True,Position=1)]
+  [string]$domainUrl
+)
+
 Write-Output '*** register_basic_tasks STARTING'
 
 $instanceId = (New-Object System.Net.WebClient).DownloadString("http://169.254.169.254/latest/meta-data/instance-id")
 
 # common setup
-$driftconfigrepo = "s3://relib-test/directive-games"
 $user = "System"
 $taskPath = "\Drift\"
 $exe = 'c:\python27\python.exe'
@@ -78,7 +83,7 @@ Register-ScheduledTask -TaskName $name -TaskPath $taskPath -Action $action -Trig
 
 # Initialize drift config on reboot
 $name = 'Initialize Drift Config'
-$cmd = "init $driftconfigrepo"
+$cmd = "init $domainUrl"
 Write-Output '*** Registering task '''$name''' with command '''$cmd''''
 
 Unregister-ScheduledTask -TaskName $name -TaskPath $taskPath -Confirm:$false -ErrorAction:SilentlyContinue  

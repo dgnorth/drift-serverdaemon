@@ -46,7 +46,7 @@ $newTag.Value = "finish_install"
 New-EC2Tag -Resource $instanceId -Tag $newTag
 
 Write-Output '*** Registering basic tasks'
-Invoke-Expression -Command $finalfolder'\scripts\register_basic_tasks.ps1'
+Invoke-Expression -Command $finalfolder'\scripts\register_basic_tasks.ps1 -domainUrl %domain_url%'
 
 Write-Output '*** Restarting Splunk Forwarder'
 Restart-Service SplunkForwarder
