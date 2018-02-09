@@ -72,11 +72,19 @@ $newTag.Key = "drift-status"
 $newTag.Value = "install_visualstudio"
 New-EC2Tag -Resource $instanceId -Tag $newTag
 
-Write-Output 'Fetching Visual Studio Redistribution'
-$filename = "vc_redist.x64.exe"
+Write-Output 'Fetching Visual Studio 2013 Redistribution'
+$filename = "vc_redist.x64.vc2013.exe"
 Read-S3Object -BucketName directive-tiers.dg-api.com -Key ("ue4-builds/redist/"+$filename) -File ($downloadfolder+"\"+$filename) -Region eu-west-1
 
-Write-Output 'Installing Visual Studio Redistribution'
+Write-Output 'Installing Visual Studio 2103 Redistribution'
+Start-Process ($downloadfolder + "\" + $filename) -ArgumentList ("/qn /L*v /silent " + $setuplogfolder + "\" + $filename + ".log") -Wait
+$exit_code_sum += $lastexitcode
+
+Write-Output 'Fetching Visual Studio 2015 Redistribution'
+$filename = "vc_redist.x64.vs2015.exe"
+Read-S3Object -BucketName directive-tiers.dg-api.com -Key ("ue4-builds/redist/"+$filename) -File ($downloadfolder+"\"+$filename) -Region eu-west-1
+
+Write-Output 'Installing Visual Studio 2015 Redistribution'
 Start-Process ($downloadfolder + "\" + $filename) -ArgumentList ("/qn /L*v /silent " + $setuplogfolder + "\" + $filename + ".log") -Wait
 $exit_code_sum += $lastexitcode
 
