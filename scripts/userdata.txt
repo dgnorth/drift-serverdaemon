@@ -48,8 +48,8 @@ New-EC2Tag -Resource $instanceId -Tag $newTag
 Write-Output '*** Registering basic tasks'
 Invoke-Expression -Command $finalfolder'\scripts\register_basic_tasks.ps1 -domainUrl %domain_url%'
 
-Write-Output '*** Restarting Splunk Forwarder'
-Restart-Service SplunkForwarder
+# Write-Output '*** Restarting Splunk Forwarder'
+# Restart-Service SplunkForwarder
 
 $newTag = New-Object Amazon.EC2.Model.Tag
 $newTag.Key = "drift-status"
