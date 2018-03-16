@@ -109,7 +109,13 @@ $newTag.Value = "install_packages"
 New-EC2Tag -Resource $instanceId -Tag $newTag
 
 Write-Output 'Installing python requirements'
-Start-Process "c:\python27\scripts\pip.exe" -Wait -ArgumentList ("install -r c:\drift-serverdaemon\requirements.txt")
+$stdOutLog = "$env:TEMP\stdout.log"
+$stdErrLog = "$env:TEMP\stderr.log"
+$pipLog = ($setuplogfolder + "\" + "pip.log")
+Start-Process "c:\python27\python.exe" -Wait -ArgumentList ("-m pip install --upgrade pip") -RedirectStandardOutput $stdOutLog -RedirectStandardError $stdErrLog
+Get-Content $stdOutLog $stdErrLog | Out-File $pipLog -Append
+Start-Process "c:\python27\scripts\pip.exe" -Wait -ArgumentList ("install -r c:\drift-serverdaemon\requirements.txt") -RedirectStandardOutput $stdOutLog -RedirectStandardError $stdErrLog
+Get-Content $stdOutLog $stdErrLog | Out-File $pipLog -Append
 
 $newTag = New-Object Amazon.EC2.Model.Tag
 $newTag.Key = "drift-status"
