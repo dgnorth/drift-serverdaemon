@@ -73,7 +73,7 @@ $newTag.Value = "install_visualstudio"
 New-EC2Tag -Resource $instanceId -Tag $newTag
 
 Write-Output 'Fetching Visual Studio 2013 Redistribution'
-$filename = "vc_redist.x64.vc2013.exe"
+$filename = "vc_redist.x64.vs2013.exe"
 Read-S3Object -BucketName directive-tiers.dg-api.com -Key ("ue4-builds/redist/"+$filename) -File ($downloadfolder+"\"+$filename) -Region eu-west-1
 
 Write-Output 'Installing Visual Studio 2103 Redistribution'
