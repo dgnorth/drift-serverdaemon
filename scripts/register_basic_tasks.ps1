@@ -33,8 +33,8 @@ $cmd = "update_daemon.py"
 Write-Output '*** Registering task '''$name''' with command '''$cmd''''
 
 Unregister-ScheduledTask -TaskName $name -TaskPath $taskPath -Confirm:$false -ErrorAction:SilentlyContinue  
-$action = New-ScheduledTaskAction -Execute "$exe" -Argument "$cmd" -WorkingDirectory $location
-Register-ScheduledTask -TaskName $name -TaskPath $taskPath -Action $action -Trigger $minuteTrigger -User 'System' | Out-Null
+#$action = New-ScheduledTaskAction -Execute "$exe" -Argument "$cmd" -WorkingDirectory $location
+#Register-ScheduledTask -TaskName $name -TaskPath $taskPath -Action $action -Trigger $minuteTrigger -User 'System' | Out-Null
 
 # Refresh drift config
 $name = 'Refresh Drift Config'
