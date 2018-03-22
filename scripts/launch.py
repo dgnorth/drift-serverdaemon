@@ -16,7 +16,7 @@ except ImportError:
     sys.exit(1)
 
 #WINDOWS_BASE_IMAGE_NAME = 'Windows_Server-2016-English-Full-Base-*'
-WINDOWS_BASE_IMAGE_NAME = 'Windows_Server-2012-R2_RTM-English-64Bit-Base-*'
+WINDOWS_BASE_IMAGE_NAME = 'Windows_Server-2016-English-Full-Base-*'
 AMI_OWNER_CANONICAL = 'amazon'
 
 REGION_NAME = 'eu-west-1'

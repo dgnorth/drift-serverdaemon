@@ -1,12 +1,15 @@
 <powershell>
-Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Force -ErrorAction SilentlyContinue
-
 $instanceId = (New-Object System.Net.WebClient).DownloadString("http://169.254.169.254/latest/meta-data/instance-id")
 
-$newTag = New-Object Amazon.EC2.Model.Tag
-$newTag.Key = "drift-status"
-$newTag.Value = "provisioning"
-New-EC2Tag -Resource $instanceId -Tag $newTag
+function Update-Status-Tag {
+	param( [string]$Status )
+	$newTag = New-Object Amazon.EC2.Model.Tag
+	$newTag.Key = "drift-status"
+	$newTag.Value = $Status
+	New-EC2Tag -Resource $instanceId -Tag $newTag
+}
+
+Update-Status-Tag -Status "provisioning"
 
 $rootfolder = "c:\"
 $finalfolder= $rootfolder+'drift-serverdaemon'
@@ -32,29 +35,17 @@ $foldername = Get-ChildItem C:\ | Where-Object {$_.PSIsContainer -eq $true -and 
 Write-Output '*** Renaming'$foldername' to '$finalfolder
 Rename-Item $rootfolder$foldername $finalfolder
 
-$newTag = New-Object Amazon.EC2.Model.Tag
-$newTag.Key = "drift-status"
-$newTag.Value = "install_prerequisites"
-New-EC2Tag -Resource $instanceId -Tag $newTag
+Update-Status-Tag -Status "install_prerequisites"
 
 Write-Output '*** Executing install_redist'
 Invoke-Expression -Command $finalfolder'\scripts\install_redist.ps1 -domainUrl %domain_url%'
 
-$newTag = New-Object Amazon.EC2.Model.Tag
-$newTag.Key = "drift-status"
-$newTag.Value = "finish_install"
-New-EC2Tag -Resource $instanceId -Tag $newTag
+Update-Status-Tag -Status "finish_install"
 
 Write-Output '*** Registering basic tasks'
 Invoke-Expression -Command $finalfolder'\scripts\register_basic_tasks.ps1 -domainUrl %domain_url%'
 
-# Write-Output '*** Restarting Splunk Forwarder'
-# Restart-Service SplunkForwarder
-
-$newTag = New-Object Amazon.EC2.Model.Tag
-$newTag.Key = "drift-status"
-$newTag.Value = "ready"
-New-EC2Tag -Resource $instanceId -Tag $newTag
+Update-Status-Tag -Status "ready"
 
 Write-Output '*** All Done'
 </powershell>

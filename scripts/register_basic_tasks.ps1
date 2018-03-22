@@ -14,7 +14,7 @@ $taskPath = "\Drift\"
 $exe = 'c:\python27\python.exe'
 $driftconfigexe = "c:\python27\scripts\driftconfig"
 $location = "C:\drift-serverdaemon\"
-$minuteTrigger = New-ScheduledTaskTrigger -Once -At (Get-Date) -RepetitionInterval (New-TimeSpan -Minutes 1) -RepetitionDuration ([System.TimeSpan]::MaxValue)
+$minuteTrigger = New-ScheduledTaskTrigger -Once -At (Get-Date) -RepetitionInterval (New-TimeSpan -Minutes 1)
 $dailyTrigger = New-ScheduledTaskTrigger -Daily -At 12am
 $startUpTrigger = New-ScheduledTaskTrigger -AtStartup
 
@@ -28,11 +28,11 @@ $action = New-ScheduledTaskAction -Execute "$exe" -Argument "$cmd" -WorkingDirec
 Register-ScheduledTask -TaskName $name -TaskPath $taskPath -Action $action -Trigger $minuteTrigger -User 'System' | Out-Null
 
 # Update the drift-serverdaemon code every minute if a new version is found
-$name = 'Update Server Daemon'
-$cmd = "update_daemon.py"
-Write-Output '*** Registering task '''$name''' with command '''$cmd''''
+#$name = 'Update Server Daemon'
+#$cmd = "update_daemon.py"
+#Write-Output '*** Registering task '''$name''' with command '''$cmd''''
 
-Unregister-ScheduledTask -TaskName $name -TaskPath $taskPath -Confirm:$false -ErrorAction:SilentlyContinue  
+#Unregister-ScheduledTask -TaskName $name -TaskPath $taskPath -Confirm:$false -ErrorAction:SilentlyContinue
 #$action = New-ScheduledTaskAction -Execute "$exe" -Argument "$cmd" -WorkingDirectory $location
 #Register-ScheduledTask -TaskName $name -TaskPath $taskPath -Action $action -Trigger $minuteTrigger -User 'System' | Out-Null
 
