@@ -33,19 +33,9 @@ def get_auth_token(tenant, role):
     #! TODO: Find user in organization config table
 
     if role == 'battleserver':
-        credentials = {
-            "username": "user+pass:$SERVICE$",
-            #"password": "bnVVW4vRBZFYHn5a8PrNHdUXHX2yU6wf",
-            "password": "SERVICE",
-            "provider": "user+pass",
-        }
+        credentials = config.battleserver_credentials
     elif role == "battledaemon":
-        credentials = {
-            "username": "user+pass:$SERVICE$",
-            #"password": "bnVVW4vRBZFYHn5a8PrNHdUXHX2yU6wf",
-            "password": "SERVICE",
-            "provider": "user+pass",
-        }
+        credentials = config.battledaemon_credentials
     else:
         raise RuntimeError("'role' %s not understood." % role)
     headers = {'Drift-Api-Key': config.api_key, 'Content-type': 'application/json'} #! TODO: Replace api key with product key

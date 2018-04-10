@@ -58,6 +58,22 @@ def get_api_key():
         raise RuntimeError("Cannot find API Key for product '%s'" % config.product_name)
     return '{}:{}'.format(rows[0]['api_key_name'], api_key_version)
 
+def get_battledaemon_credentials():
+    return get_battleserver_credentials()
+
+def get_battleserver_credentials():
+    ts = get_ts()
+    tier_name = config.get_tier_name()
+    rows = ts.get_table('tiers').find({'tier_name': tier_name})
+    if not rows:
+        raise RuntimeError('Tier %s not present in config' % (tier_name))
+    service_user = rows[0]['service_user']
+    return {
+            "username": service_user['username'],
+            "password": service_user['password'],
+            "provider": "user+pass",
+        }
+
 def get_ts():
     domains = get_domains().values()
     if len(domains) != 1:
