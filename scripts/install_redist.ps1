@@ -73,10 +73,7 @@ Write-Output 'Disabling Windows Firewall'
 Write-Output 'Installing Telnet client'
 & pkgmgr /iu:"TelnetClient"
 
-$newTag = New-Object Amazon.EC2.Model.Tag
-$newTag.Key = "drift-status"
-$newTag.Value = "install_packages"
-New-EC2Tag -Resource $instanceId -Tag $newTag
+Update-Status-Tag -Status "install_packages"
 
 Write-Output 'Installing python requirements'
 $stdOutLog = "$env:TEMP\stdout.log"
