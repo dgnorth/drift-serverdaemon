@@ -26,7 +26,7 @@ def get_run_task_name(ref):
 def get_run_tasks(scheduler):
     objTaskFolder = scheduler.GetFolder(TASK_FOLDER)
     colTasks = objTaskFolder.GetTasks(1)
-    ret = [tuple(t.Name.split("=")[-1].split(",")) for t in colTasks if t.Name.startswith('Run ref=')]
+    ret = [(t.Definition.Actions[0].Arguments.split("--ref=")[-1].split(" ")[0], t.Name.split("=")[-1].split(",")[-1]) for t in colTasks if t.Name.startswith('Run ref=')]
     return set(ret)
 
 def remove_ref_task(scheduler, ref):
