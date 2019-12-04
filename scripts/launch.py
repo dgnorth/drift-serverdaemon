@@ -12,7 +12,7 @@ try:
     import boto3
     from tabulate import tabulate
 except ImportError:
-    print "Failed to import libraries. Please run pip install -r requirements.txt"
+    print("Failed to import libraries. Please run pip install -r requirements.txt")
     sys.exit(1)
 
 #WINDOWS_BASE_IMAGE_NAME = 'Windows_Server-2016-English-Full-Base-*'
@@ -47,13 +47,13 @@ def filterize(d):
     return [{'Name': k, 'Values': [v]} for k, v in d.items()]
 
 def find_ami(ec2):
-    print "Finding the latest AMI on AWS that matches", WINDOWS_BASE_IMAGE_NAME
+    print("Finding the latest AMI on AWS that matches", WINDOWS_BASE_IMAGE_NAME)
     filters = [
         {'Name': 'name', 'Values': [WINDOWS_BASE_IMAGE_NAME]}, 
     ]
     amis = list(ec2.images.filter(Owners=[AMI_OWNER_CANONICAL], Filters=filters))
     if not amis:
-        print "No AMI found matching '{}'. Not sure what to do now.".format(WINDOWS_BASE_IMAGE_NAME)
+        print("No AMI found matching '{}'. Not sure what to do now.".format(WINDOWS_BASE_IMAGE_NAME))
         sys.exit(1)        
     ami = max(amis, key=operator.attrgetter("creation_date"))
     return ami
@@ -85,18 +85,18 @@ def launch_instance(tier_name, group_name, region_name, instance_type, domain_ur
             name = tags['Name']
             if 'public' in name:
                 subnet_id = s.id
-                print "Picking subnet '%s' (%s) because I think its public" % (name, s.id)
+                print("Picking subnet '%s' (%s) because I think its public" % (name, s.id))
                 break
     else:
         subnet_id = random.choice(subnets).id
-        print "Picked subnet '%s' by random because I found no public ones" % (subnet_id)
+        print("Picked subnet '%s' by random because I found no public ones" % (subnet_id))
 
-    print "Using source AMI:"
-    print "\tID:\t", ami.id
-    print "\tName:\t", ami.name
-    print "\tDate:\t", ami.creation_date
-    print "Security Groups: %s" % (", ".join(security_group_ids))
-    print "VPC ID: %s" % vpc_id
+    print("Using source AMI:")
+    print("\tID:\t", ami.id)
+    print("\tName:\t", ami.name)
+    print("\tDate:\t", ami.creation_date)
+    print("Security Groups: %s" % (", ".join(security_group_ids)))
+    print("VPC ID: %s" % vpc_id)
 
     user_data = ""
     with open("userdata.txt", "r") as f:
@@ -139,9 +139,9 @@ def launch_instance(tier_name, group_name, region_name, instance_type, domain_ur
     instance_name = instance.private_dns_name
     instance_id = instance.id
 
-    print "\nInstance '%s' (%s) is now in state '%s'" % (instance_name, instance_id, state)
+    print("\nInstance '%s' (%s) is now in state '%s'" % (instance_name, instance_id, state))
     if state != 'running':
-        print 'Unexpected state!'
+        print('Unexpected state!')
         sys.exit(1)
 
     tags = {
@@ -157,13 +157,13 @@ def launch_instance(tier_name, group_name, region_name, instance_type, domain_ur
     
     post_action_report()
 
-    print "\n" + "*"*80
-    print "Instance '%s' (%s) will now be initialized." % (instance_name, instance_id)
-    print "This process will take up to 10-20 minutes and should be completed before %s" % ((datetime.datetime.now()+datetime.timedelta(minutes=20)).strftime("%H:%M"))
-    print "Run 'launch.py %s list' to see setup status. Setup is complete when 'drift status' reaches 'ready' " % product_name
-    print "In order to finalize setup you might need to add the machine group '%s' to the config for your product" % group_name
-    print "If you have tenants for the product configured for this group they will get machine heartbeats once setup is done"
-    print "*"*80
+    print("\n" + "*"*80)
+    print("Instance '%s' (%s) will now be initialized." % (instance_name, instance_id))
+    print("This process will take up to 10-20 minutes and should be completed before %s" % ((datetime.datetime.now()+datetime.timedelta(minutes=20)).strftime("%H:%M")))
+    print("Run 'launch.py %s list' to see setup status. Setup is complete when 'drift status' reaches 'ready' " % product_name)
+    print("In order to finalize setup you might need to add the machine group '%s' to the config for your product" % group_name)
+    print("If you have tenants for the product configured for this group they will get machine heartbeats once setup is done")
+    print("*"*80)
 
 def list_instances(group_name=None, region_name=None, instance_id=None, state=None):
     regions = REGION_CHOICES
@@ -204,10 +204,10 @@ def list_instances(group_name=None, region_name=None, instance_id=None, state=No
     instances.sort()
     if instances:
         print
-        print tabulate(instances, headers=["instance id", "instance type", "group name", "region name", "launched by", "launch time", "state", "drift status"])
+        print(tabulate(instances, headers=["instance id", "instance type", "group name", "region name", "launched by", "launch time", "state", "drift status"]))
         print
     else:
-        print "No instances found"
+        print("No instances found")
     return instances
 
 def terminate_instance(instance_id):
@@ -216,10 +216,10 @@ def terminate_instance(instance_id):
         return
     yes = raw_input("Are you sure you want to terminate instance '%s'? [Y/n]: " % instance_id)
     if yes != "Y":
-        print "User cancelled"
+        print("User cancelled")
         return
     region_name = instances[0][3]
-    print "Terminating instance '%s' in region %s..." % (instance_id, region_name)
+    print("Terminating instance '%s' in region %s..." % (instance_id, region_name))
     ec2 = boto3.resource('ec2', region_name=region_name)
     ec2.instances.filter(InstanceIds=[instance_id]).terminate()
 
@@ -227,7 +227,7 @@ def terminate_instance(instance_id):
 
 def check_state(state, intended_state):
     if state != intended_state:
-        print "Instance needs to be in state '%s' but is in state '%s'. Cannot continue." % (intended_state, state)
+        print("Instance needs to be in state '%s' but is in state '%s'. Cannot continue." % (intended_state, state))
         sys.exit(2)
 
 def stop_instance(instance_id):
@@ -237,7 +237,7 @@ def stop_instance(instance_id):
     check_state(instances[0][6], 'running')
 
     region_name = instances[0][3]
-    print "Stopping instance '%s' in region %s..." % (instance_id, region_name)
+    print("Stopping instance '%s' in region %s..." % (instance_id, region_name))
     ec2 = boto3.resource('ec2', region_name=region_name)
     ec2.instances.filter(InstanceIds=[instance_id]).stop()
 
@@ -250,7 +250,7 @@ def start_instance(instance_id):
     check_state(instances[0][6], 'stopped')
 
     region_name = instances[0][3]
-    print "Restarting instance '%s' in region %s..." % (instance_id, region_name)
+    print("Restarting instance '%s' in region %s..." % (instance_id, region_name))
     ec2 = boto3.resource('ec2', region_name=region_name)
     ec2.instances.filter(InstanceIds=[instance_id]).start()
 
@@ -258,7 +258,7 @@ def start_instance(instance_id):
 
 def post_action_report():
     time.sleep(1.0)
-    print "\nCurrent status for product '%s':" % product_name
+    print("\nCurrent status for product '%s':" % product_name)
     list_instances()
 
 def main():
