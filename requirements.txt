@@ -5,3 +5,4 @@ psutil
 jsonschema
 https://github.com/dgnorth/drift-config/tarball/develop
 pypiwin32
+tabulate
