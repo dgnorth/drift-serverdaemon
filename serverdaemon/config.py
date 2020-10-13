@@ -1,12 +1,11 @@
 # -*- coding: utf-8 -*-
 import json
-import os
 import os.path
-import random
-import socket
+
+from serverdaemon.utils import get_battledaemon_credentials, get_battleserver_credentials
 # Get basic info from per-tier config file
 from serverdaemon.utils import get_tier_name, get_tags, get_repository, get_api_key, get_region
-from serverdaemon.utils import get_battledaemon_credentials, get_battleserver_credentials
+
 TIER = get_tier_name()
 
 head, tail = os.path.split(__file__)

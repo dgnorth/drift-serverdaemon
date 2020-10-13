@@ -8,7 +8,7 @@ import boto3
 from boto3.s3.transfer import S3Transfer, TransferConfig
 
 if 'deploy' not in sys.argv or 'sdist' not in sys.argv:
-    print "You must call this setup script with both 'sdist' and 'deploy' commands"
+    print("You must call this setup script with both 'sdist' and 'deploy' commands")
     sys.exit(1)
 
 def update_version():
@@ -51,7 +51,7 @@ class DeployCommand(Command):
         p = os.path.join('dist', local_filename)
         p = os.path.abspath(p)
         transfer.upload_file(p, BUCKET_NAME, base_name)
-        print "Done uploading build '%s' to S3 as %s" % (local_filename, base_name)
+        print("Done uploading build '%s' to S3 as %s" % (local_filename, base_name))
 
     def run(self):
         assert os.getcwd() == self.cwd, 'Must be in package root: %s' % self.cwd

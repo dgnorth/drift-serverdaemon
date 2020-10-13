@@ -3,27 +3,19 @@
     Drift game server management - S3 Functionality
     ------------------------------------------------
 """
+import datetime
+import json
 import os
 import os.path
-from zipfile import ZipFile
-import subprocess
-import shutil
-import time
-import socket
-import json
-from functools import wraps
 import sys
-import random
-import datetime
+import time
 
-import boto
-import boto.ec2
+import dateutil.parser as parser
 from boto.s3 import connect_to_region
 from boto.s3.connection import OrdinaryCallingFormat
-import requests
+
 import config
-from logsetup import logger
-import dateutil.parser as parser
+from serverdaemon.logsetup import logger
 
 # This is the S3 bucket name for server builds:
 bucket_name = "ncl-teamcity"
@@ -169,8 +161,8 @@ def cleanup_s3(repository):
                     break
             else:
                 files.append((filename, diff.days, f.name, build_number, dt))
-                print "Deleting build %s from %s..." % (filename, dt)
+                print("Deleting build %s from %s..." % (filename, dt))
                 f.delete()
 
     files.sort(key=lambda x: x[1], reverse=True)
-    print "Deleted %s files from S3" % len(files)
+    print("Deleted %s files from S3" % len(files))

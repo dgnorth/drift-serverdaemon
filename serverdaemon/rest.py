@@ -3,13 +3,13 @@
     Drift game server management - REST Resoruces
     ------------------------------------------------
 """
-import os, sys, json
+import json
+
 import requests
 
 import config
-from logsetup import logger
-
-from utils import get_machine_info, get_ts
+from serverdaemon.logsetup import logger
+from serverdaemon.utils import get_machine_info, get_ts
 
 DEFAULT_ROOT_ENDPOINT = "https://{}.dg-api.com/drift"
 

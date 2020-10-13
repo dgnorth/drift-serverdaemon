@@ -29,7 +29,7 @@ def delete_all_builds():
         logger.warning("Deleting all builds...")
         daemon.delete_all_builds()
     else:
-        print "I didn't think so!"
+        print("I didn't think so!")
         sys.exit(1)
 
 def main():

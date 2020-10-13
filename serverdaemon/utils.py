@@ -1,18 +1,13 @@
 # -*- coding: utf-8 -*-
-import json
 import subprocess
-import datetime
-
-import sys, os
-import logging
-import requests
-import platform
 from socket import gethostname
-import boto.ec2
-import config
-from logsetup import logger
 
+import boto.ec2
+import requests
 from driftconfig.util import get_domains
+
+import config
+from serverdaemon.logsetup import logger
 
 ec2_metadata = "http://169.254.169.254/latest/meta-data/"
 
@@ -40,7 +35,7 @@ def get_local_refs():
 
 def update_state(state, meta):
     #! This appears to be some placeholder
-    print "update_state: %s - %s" % (state, meta)
+    print("update_state: %s - %s" % (state, meta))
 
 def get_repository():
     ts = get_ts()

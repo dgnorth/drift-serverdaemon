@@ -5,25 +5,12 @@
 """
 import os
 import os.path
+import zipfile
+
 import boto3
 
-import zipfile
-import subprocess
-import shutil
-import time
-import socket
-import json
-from functools import wraps
-import sys
-import random
-
-import boto
-import boto.ec2
-from boto.s3 import connect_to_region
-from boto.s3.connection import OrdinaryCallingFormat
-import requests
 import config
-from logsetup import logger
+from serverdaemon.logsetup import logger
 
 # This is the S3 bucket name for server builds:
 bucket_name = "battleserver-logs"

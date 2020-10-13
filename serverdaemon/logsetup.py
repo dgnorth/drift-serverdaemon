@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 import datetime
-
-import sys, os
-import logging
-from logging import FileHandler
 import json
+import logging
+import os
+import sys
 import time
+from logging import FileHandler
 
 DAEMON_LOGS_FOLDER =  "c:/logs/drift-serverdaemon"
 EVENT_LOG_FILENAME = "events.log"

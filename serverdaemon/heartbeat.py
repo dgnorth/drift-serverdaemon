@@ -3,15 +3,15 @@
     Drift game server management - Upload logfiles to S3 and delete
     ------------------------------------------------
 """
-import os
-import boto3
-import requests
-import config
-from serverdaemon.utils import get_ts, get_tags
-from serverdaemon.rest import get_machine_resource, get_battle_api
-from logsetup import logger, flush_events, log_event
-import psutil
 import datetime
+import os
+
+import psutil
+
+import config
+from serverdaemon.logsetup import logger, flush_events
+from serverdaemon.rest import get_machine_resource, get_battle_api
+from serverdaemon.utils import get_ts, get_tags
 
 MB = 1024 * 1024
 TASK_FOLDER = "\\Drift"
@@ -92,7 +92,7 @@ def heartbeat_all_tenants():
     group_name = tags.get("drift-group_name")
 
     if not product_name or not group_name:
-        print "This machine is not configured to be an UE4 server! Missing necessary tags."
+        print("This machine is not configured to be an UE4 server! Missing necessary tags.")
         sys.exit(1)
 
     logger.info("Heartbeating all tenants in product '%s' with group '%s'", product_name, group_name)

@@ -3,37 +3,27 @@
     Drift game server management - Main Daemon
     ------------------------------------------------
 """
+import copy
+import datetime
 import os
 import os.path
-import copy
-import collections
-import subprocess
 import shutil
-import time, datetime
 import socket
-import json
-from functools import wraps
+import subprocess
 import sys
-import random
-import config
-import dateutil.parser
-import glob
+import time
+from threading import Thread
 
+import dateutil.parser
 import psutil
 
-import requests
-
-from logsetup import logger, log_event
-from s3 import get_index
-from config import config_file
-from rest import RESTResource, ServerResource, get_auth_token, get_battle_api, get_machine_resource, get_root_endpoint
-
-import sys
-from subprocess import PIPE, Popen
-from threading  import Thread
-
+import config
+from serverdaemon.config import config_file
+from serverdaemon.logsetup import logger, log_event
+from serverdaemon.rest import ServerResource, get_auth_token, get_battle_api, get_machine_resource, get_root_endpoint
+from serverdaemon.s3 import get_index
 from serverdaemon.s3 import get_manifest
-from serverdaemon.utils import update_state, get_num_processes
+from serverdaemon.utils import get_num_processes
 
 try:
     from Queue import Queue, Empty
@@ -355,7 +345,7 @@ class Daemon(object):
                             line = q.get(timeout=.1)
                         except Empty:
                             #sys.stdout.write(".")
-                            print "%s..." % pid
+                            print("%s..." % pid)
                             time.sleep(1.0)
                         else: # got line
                             empty = False

@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
-import sys, shutil, os
-from serverdaemon.utils import get_ts, get_tags
-from serverdaemon.utils import update_state, get_local_refs
-from serverdaemon import config
-from serverdaemon.s3 import get_manifest, is_build_installed, download_build
-from logsetup import logger, log_event
-import boto3
+import os
+import shutil
+import sys
 from zipfile import ZipFile
+
+from serverdaemon import config
+from serverdaemon.logsetup import logger, log_event
+from serverdaemon.s3 import get_manifest, is_build_installed, download_build
+from serverdaemon.utils import get_ts
+from serverdaemon.utils import update_state, get_local_refs
 
 """
 
@@ -104,7 +106,7 @@ def download_latest_builds(force=False):
             logger.info("Build %s not found. Ignoring ref.", ref)
             continue
         build_name = build_info["build"]
-        print "Checking out build '%s'" % build_name
+        print("Checking out build '%s'" % build_name)
         if not force and is_build_installed(build_name, build_info["executable_path"]):
             logger.info("Build '%s' already installed" % build_name)
             continue

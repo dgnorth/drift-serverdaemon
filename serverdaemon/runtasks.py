@@ -1,19 +1,15 @@
 # -*- coding: utf-8 -*-
 
-import sys, os
-import datetime, time, json, time, random
-import argparse
-import operator
-
-import boto.ec2
-import boto.iam
-import boto3
+import datetime
+import getpass
+import os
+import sys
+import time
 
 import win32com.client as win
-import getpass
 
-from utils import get_local_refs
-from logsetup import logger, log_event
+from serverdaemon.logsetup import logger, log_event
+from serverdaemon.utils import get_local_refs
 
 TASK_FOLDER = "\\Drift"
 PYTHON_PATH = r"c:\python27\python.exe"
@@ -102,8 +98,8 @@ def update_tasks():
 
     actual_refs = get_run_tasks(scheduler)
     wanted_refs = get_local_refs()
-    print "Currently installed refs: %s" % ", ".join(["%s:%s" % (r[0], r[1]) for r in actual_refs])
-    print "I want to run the following refs: %s" % ", ".join(["%s:%s" % (r[0], r[1]) for r in wanted_refs])
+    print("Currently installed refs: %s" % ", ".join(["%s:%s" % (r[0], r[1]) for r in actual_refs]))
+    print("I want to run the following refs: %s" % ", ".join(["%s:%s" % (r[0], r[1]) for r in wanted_refs]))
     if actual_refs == wanted_refs:
         logger.info('Wanted refs match installed refs. Nothing to do.')
         sys.exit(0)
