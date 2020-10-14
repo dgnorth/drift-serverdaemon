@@ -20,6 +20,7 @@ from serverdaemon.logsetup import logger
 # This is the S3 bucket name for server builds:
 bucket_name = "ncl-teamcity"
 
+
 def sync_index():
     path = config.BUILD_PATH
     bucket_name = config.BUILD_BUCKET
@@ -58,6 +59,7 @@ def sync_index():
         with open(local_filename, "wb") as f:
             f.write(contents)
 
+
 def get_manifest(ref):
     index_file = get_index()
     try:
@@ -83,6 +85,7 @@ def get_manifest(ref):
                 logger.error("Unable to get manifest from file '%s'. %s", local_filename, e)
     return manifest
 
+
 def get_index():
     folder = "config/{repo}/".format(repo=config.BUILD_PATH)
     local_filename = os.path.join(folder, "index.json")
@@ -90,6 +93,7 @@ def get_index():
     if not os.path.exists(local_filename):
         raise RuntimeError("Repository has not been synced")
     return json.load(open(local_filename))
+
 
 def is_build_installed(build_name, executable_path):
     build_path = os.path.join(config.BSD_BATTLESERVER_FOLDER, build_name)
@@ -102,6 +106,7 @@ def is_build_installed(build_name, executable_path):
         if os.path.exists("build_path"):
             logger.warning("Folder '%s exists but no .exe found!" % build_path)
         return False
+
 
 def download_build(filename, ignore_if_exists=False):
     logger.info("Downloading build %s...", filename)
@@ -135,7 +140,8 @@ def download_build(filename, ignore_if_exists=False):
 
     return dest_path
 
-def cleanup_s3(repository):
+
+def cleanup_s3():
     """
     Slapped together to clean up old unused builds on S3
     """

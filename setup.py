@@ -11,6 +11,7 @@ if 'deploy' not in sys.argv or 'sdist' not in sys.argv:
     print("You must call this setup script with both 'sdist' and 'deploy' commands")
     sys.exit(1)
 
+
 def update_version():
     version = None
 
@@ -28,19 +29,25 @@ def update_version():
         f.write(version + "\n")
     return version
 
+
 version = update_version()
+
 
 REGION = "eu-west-1"
 BUCKET_NAME = "directive-tiers.dg-api.com"
 UE4_BUILDS_FOLDER = "ue4-builds"
 
+
 class DeployCommand(Command):
     description = "Deploy build to S3 so that daemons will pick it up and install"
     user_options = []
+
     def initialize_options(self):
         self.cwd = None
+
     def finalize_options(self):
         self.cwd = os.getcwd()
+
     def upload_build(self, local_filename, upload_filename):
         client = boto3.client('s3', REGION)
         base_name = "{}/{}".format(
@@ -61,6 +68,7 @@ class DeployCommand(Command):
 
         latest_filename = os.path.join('drift-serverdaemon-latest.zip')
         self.upload_build(local_filename, latest_filename)
+
 
 setup_args = dict(
     name="drift-serverdaemon",

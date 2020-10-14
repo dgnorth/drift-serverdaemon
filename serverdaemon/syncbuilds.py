@@ -22,6 +22,7 @@ from serverdaemon.utils import update_state, get_local_refs
 
 """
 
+
 def install_build(zipfile_name, ignore_if_exists=False):
     """
     Install server build on local drive. 'zipfile_name' is the name of the
@@ -81,6 +82,7 @@ def install_build(zipfile_name, ignore_if_exists=False):
                 shutil.rmtree(staging_folder)
 
     return image_name
+
 
 def download_latest_builds(force=False):
     ts = get_ts()

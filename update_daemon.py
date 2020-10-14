@@ -9,6 +9,7 @@ UE4_BUILDS_FOLDER = "ue4-builds"
 
 INSTALL_FOLDER = r"c:\drift-serverdaemon"
 
+
 def get_my_version():
     t = [0, 0, 0]
     try:
@@ -19,6 +20,7 @@ def get_my_version():
     except:
         logger.warning("Old version invalid")
     return t
+
 
 def kill_python_processes():
     command = ["tasklist"]
@@ -45,6 +47,7 @@ def kill_python_processes():
                 subprocess.check_call(command, shell=True)
             except Exception as e:
                 logger.error('Could not kill task. Error = %s' % e)
+
 
 def check_download():
     client = boto3.client('s3', REGION)
@@ -82,6 +85,7 @@ def check_download():
     transfer.download_file(BUCKET_NAME, max_key, out_filename)
     return out_filename
 
+
 if __name__ == "__main__":
     setup_logging("updatedaemon")
     filename = check_download()
@@ -99,7 +103,7 @@ if __name__ == "__main__":
             os.makedirs(out_dirname)
         except:
             pass
-        target = file(out_filename, "wb")
+        target = open(out_filename, "wb")
         with source, target:
             shutil.copyfileobj(source, target)
     zip_file.close()

@@ -11,6 +11,7 @@ from serverdaemon.logsetup import logger
 
 ec2_metadata = "http://169.254.169.254/latest/meta-data/"
 
+
 def get_local_refs():
     ts = get_ts()
     region_name = config.region_name
@@ -33,9 +34,11 @@ def get_local_refs():
         refs.add((r['ref'], r['tenant_name']))
     return refs
 
+
 def update_state(state, meta):
     #! This appears to be some placeholder
     print("update_state: %s - %s" % (state, meta))
+
 
 def get_repository():
     ts = get_ts()
@@ -45,6 +48,7 @@ def get_repository():
 
     return rows[0]['bucket_name'], rows[0]['path'], rows[0]['s3_region']
 
+
 def get_api_key():
     api_key_version = "service" # instead of version we use this special moniker to override all version rules in api router
     ts = get_ts()
@@ -53,8 +57,10 @@ def get_api_key():
         raise RuntimeError("Cannot find API Key for product '%s'" % config.product_name)
     return '{}:{}'.format(rows[0]['api_key_name'], api_key_version)
 
+
 def get_battledaemon_credentials():
     return get_battleserver_credentials()
+
 
 def get_battleserver_credentials():
     ts = get_ts()
@@ -69,12 +75,14 @@ def get_battleserver_credentials():
             "provider": "user+pass",
         }
 
+
 def get_ts():
     domains = get_domains().values()
     if len(domains) != 1:
         raise RuntimeError("Unexpected number of domains in drift config: %s" % len(domains))
     ts = list(domains)[0]["table_store"]
     return ts
+
 
 def get_num_processes(ref, tenant):
     ts = get_ts()
@@ -91,6 +99,7 @@ def get_num_processes(ref, tenant):
     ret = int(rows[0]['processes_per_machine'])
     return ret
 
+
 def get_region():
     #return 'eu-west-1' #!!!!!!!!!
     try:
@@ -103,6 +112,7 @@ def get_region():
     except Exception as e:
         logger.error("Cannot find region. %s" % e)
         return None
+
 
 def get_tags():
     try:
@@ -122,7 +132,7 @@ def get_tags():
             tags = ec2.instances[0].tags
             return tags
         except Exception:
-            log.warning("Could not find a tier tag on the EC2 Instance %s.", instance_id)
+            logger.warning("Could not find a tier tag on the EC2 Instance %s.", instance_id)
             raise
     except requests.exceptions.RequestException as e:
         host_name = gethostname()
@@ -137,6 +147,7 @@ def get_tags():
     logger.warning("Not running on EC2. Returning hard coded temp values for tags: %s" % repr(ret))
     return ret
 
+
 def get_tier_name():
     """
     Get tier name from an AWS EC2 tag
@@ -145,6 +156,7 @@ def get_tier_name():
     tier_name = str(tags.get("tier", "DEVNORTH"))
 
     return tier_name
+
 
 def get_machine_details():
     ret = {}

@@ -13,6 +13,7 @@ from serverdaemon.utils import get_machine_info, get_ts
 
 DEFAULT_ROOT_ENDPOINT = "https://{}.dg-api.com/drift"
 
+
 def get_root_endpoint(tenant):
     ts = get_ts()
     driftbase_tenant = ts.get_table('tenants').find({'tenant_name': tenant, 'deployable_name': 'drift-base'})[0]
@@ -20,6 +21,7 @@ def get_root_endpoint(tenant):
     if not endpoint:
         endpoint = DEFAULT_ROOT_ENDPOINT.format(tenant)
     return endpoint
+
 
 def get_auth_token(tenant, role):
     """
@@ -89,6 +91,7 @@ def get_machine_resource(sess, battle_api_host, tenant):
 
     return machine_resource
 
+
 class RESTResource(object):
     tenant = None
     location = None
@@ -136,6 +139,7 @@ class RESTResource(object):
         logger.info("[PATCH] %s", self.location)
         return self._request(method="patch", url=self.location, data=data, expect=expect)
 
+
 class ServerResource(RESTResource):
     def __init__(self, session, tenant, info, url=None):
         create = False
@@ -151,6 +155,7 @@ class ServerResource(RESTResource):
 
     def get_status(self):
         return self.get().json()["status"]
+
 
 class MachineResource(RESTResource):
     def __init__(self, session, url, tenant, info=None, create=True):

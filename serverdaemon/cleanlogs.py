@@ -15,6 +15,7 @@ from serverdaemon.logsetup import logger
 # This is the S3 bucket name for server builds:
 bucket_name = "battleserver-logs"
 
+
 def upload_logs():
     s3 = boto3.resource('s3')
     log_folder = config.BSD_LOGS_FOLDER

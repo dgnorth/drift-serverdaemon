@@ -20,8 +20,10 @@ from serverdaemon.heartbeat import heartbeat_all_tenants
 from serverdaemon.syncbuilds import download_latest_builds
 from serverdaemon.runtasks import update_tasks
 
+
 def delete_old_builds():
     daemon.delete_old_builds()
+
 
 def delete_all_builds():
     yes = raw_input("Are you sure you want to delete all builds from this machine? [Y/n]")
@@ -32,15 +34,16 @@ def delete_all_builds():
         print("I didn't think so!")
         sys.exit(1)
 
+
 def main():
     parser = argparse.ArgumentParser()
-    #parser.add_argument("cmd", choices=["run", "deploy", "killall"])
+    # parser.add_argument("cmd", choices=["run", "deploy", "killall"])
     parser.add_argument("-v", "--verbose", help="increase output verbosity", action="store_true")
     subparsers = parser.add_subparsers(help='sub-command help', dest="cmd")
 
     parser_run = subparsers.add_parser('run', help='Run a battleserver')
     parser_run.add_argument("-r", "--ref", help='The server ref to run')
-    #parser_run.add_argument("-n", "--num-processes", help='Number of UE4 processes to run simultaneously. Overrides num-processes from config')
+    # parser_run.add_argument("-n", "--num-processes", help='Number of UE4 processes to run simultaneously. Overrides num-processes from config')
     parser_run.add_argument("-t", "--tenant", help='Backend tenant to connect to. Overrides tenant from config')
 
     subparsers.add_parser('clean', help='Delete old builds from the machine')
@@ -49,7 +52,6 @@ def main():
     subparsers.add_parser('cleans3', help='Delete old builds from S3')
     subparsers.add_parser('heartbeat', help='Heartbeat this machine on all registered tenants')
     subparsers.add_parser('updateruntasks', help='Set up run tasks for all registered refs')
-    
 
     parser_deploy = subparsers.add_parser('syncbuilds', help='Fetch and install the latest builds from S3')
     parser_deploy.add_argument("-f", "--force", action="store_true", help='Always download file (even if it already exists)')
@@ -63,7 +65,7 @@ def main():
     logsetup.args_tenant_name = tenant_name
     logsetup.args_cmd = logname
 
-    #! we have multiple ongoing run commands at once and we can't use the same logfile
+    # ! we have multiple ongoing run commands at once and we can't use the same logfile
     if args.cmd in ("run"):
         logname = "%s_%s"  % (args.cmd, os.getpid())
     setup_logging(logname)
@@ -71,7 +73,7 @@ def main():
         logger.setLevel(logging.DEBUG)
 
     # start by syncing down the index file
-    logger.info("serverdaemon starting. cmd = '%s'. Product = '%s', Tenant = '%s', Repository = '%s'" % 
+    logger.info("serverdaemon starting. cmd = '%s'. Product = '%s', Tenant = '%s', Repository = '%s'" %
                 (args.cmd, config.product_name, tenant_name, config.BUILD_PATH))
 
     try:
@@ -107,6 +109,7 @@ def main():
         heartbeat_all_tenants()
     elif args.cmd == "updateruntasks":
         update_tasks()
+
 
 if __name__ == "__main__":
     try:

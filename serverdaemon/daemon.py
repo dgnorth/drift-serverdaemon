@@ -34,9 +34,11 @@ except ImportError:
 MIN_PORT = 7777
 MAX_PORT = 8000
 
+
 def delete_all_builds():
     shutil.rmtree(config.BSD_BATTLESERVER_FOLDER, ignore_errors=True)
     shutil.rmtree(config.BSD_TEMP_FOLDER, ignore_errors=True)
+
 
 def delete_old_builds():
     """
@@ -119,6 +121,7 @@ def _get_available_port(min_port, max_port):
         "of %s to %s." % (min_port, max_port)
         )
 
+
 def kill_processes_by_ref(ref, tenant):
     """"
     Find all running processes of any version of 'ref' and terminate
@@ -154,11 +157,13 @@ def kill_processes_by_ref(ref, tenant):
 
     logger.info("Done killing processes for ref='%s', tenant='%s'. Killed %s processes", ref, tenant, len(killed_processes))
 
+
 def find_build_manifest(index_file, ref):
     for r in index_file["refs"]:
         if r["ref"] == ref:
             return r["build_manifest"]
     return -1
+
 
 class Daemon(object):
     battleserver_instances = {}
@@ -425,6 +430,7 @@ class Daemon(object):
             logger.exception("Fatal error occurred in run_battleserver_loop. Exiting")
             self.shutdown_servers_and_exit("Fatal error, '%s' occurred in run_battleserver_loop" % e)
 
+
 def get_battleserver_command(image_name, executable_path, command_line, tenant, **kw):
     command_line = command_line or []
     tenant = tenant or "default"
@@ -494,6 +500,7 @@ def get_battleserver_command(image_name, executable_path, command_line, tenant, 
     battleserver_resource.put({"status": "pending", "command_line": " ".join(command)})
 
     return command, battleserver_resource
+
 
 def list_tempfolder():
     """

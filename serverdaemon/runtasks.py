@@ -15,15 +15,18 @@ TASK_FOLDER = "\\Drift"
 PYTHON_PATH = r"c:\python27\python.exe"
 ROOT_PATH = os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), "..\\"))
 
+
 def get_run_task_name(ref):
     name = "Run ref=%s,%s" % (ref[0], ref[1])
     return name
+
 
 def get_run_tasks(scheduler):
     objTaskFolder = scheduler.GetFolder(TASK_FOLDER)
     colTasks = objTaskFolder.GetTasks(1)
     ret = [(t.Definition.Actions[0].Arguments.split("--ref=")[-1].split(" ")[0], t.Name.split("=")[-1].split(",")[-1]) for t in colTasks if t.Name.startswith('Run ref=')]
     return set(ret)
+
 
 def remove_ref_task(scheduler, ref):
     logger.warning("Removing task for ref '%s'" % str(ref))
@@ -45,6 +48,7 @@ def remove_ref_task(scheduler, ref):
 
     except Exception as e:
         logger.error("Exception occurred removing task: %s" % e)
+
 
 def add_ref_task(scheduler, ref):
     logger.warning("Adding task for ref '%s'" % str(ref))
@@ -91,6 +95,7 @@ def add_ref_task(scheduler, ref):
     task = rootFolder.GetTask(task_id)
     runningTask = task.Run("")
     logger.info("Task for ref '%s' is now running" % str(ref))
+
 
 def update_tasks():
     scheduler = win.Dispatch("Schedule.Service")

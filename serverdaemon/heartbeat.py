@@ -5,6 +5,7 @@
 """
 import datetime
 import os
+import sys
 
 import psutil
 
@@ -16,11 +17,13 @@ from serverdaemon.utils import get_ts, get_tags
 MB = 1024 * 1024
 TASK_FOLDER = "\\Drift"
 
+
 def fmt_time(dt):
     try:
         return dt.strftime("%Y-%m-%d %H:%M:%S")
     except:
         return dt
+
 
 def collect_machine_stats():
     mem = psutil.virtual_memory()
@@ -35,6 +38,7 @@ def collect_machine_stats():
     }
     return ret
 
+
 def collect_tasks():
     try:
         import win32com.client as win
@@ -48,6 +52,7 @@ def collect_tasks():
     except:
         return None
 
+
 def collect_installed_builds():
     try:
         ret = []
@@ -57,6 +62,7 @@ def collect_installed_builds():
         return ret
     except:
         return None
+
 
 def collect_processes():
     ret = []
@@ -84,6 +90,7 @@ def collect_processes():
             }
             ret.append(proc_info)
     return ret
+
 
 def heartbeat_all_tenants():
     ts = get_ts()

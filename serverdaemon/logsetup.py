@@ -14,10 +14,13 @@ args_tenant_name = None
 args_ref = None
 args_cmd = None
 
+
 def get_script_name():
     return os.path.split(sys.argv[0])[-1]
 
+
 logger = logging.getLogger(get_script_name())
+
 
 def make_log_folder():
     log_folder = DAEMON_LOGS_FOLDER
@@ -28,6 +31,7 @@ def make_log_folder():
         os.makedirs(log_folder)
     except:
         pass
+
 
 def setup_logging(logname):
     make_log_folder()
@@ -49,6 +53,7 @@ def setup_logging(logname):
     handler.setFormatter(formatter)
     logger.addHandler(handler)
     logging.getLogger("requests").setLevel(logging.WARNING)
+
 
 def log_event(event, description, details=None, severity="INFO", ref=None, tenant_name=None):
     make_log_folder()
@@ -91,6 +96,7 @@ def log_event(event, description, details=None, severity="INFO", ref=None, tenan
     else:
         logger.error("Could not save event (2) '%s': %s", event, e)
         return
+
 
 def flush_events():
     event_filename = os.path.join(DAEMON_LOGS_FOLDER, EVENT_LOG_FILENAME)
