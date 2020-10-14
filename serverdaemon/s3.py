@@ -17,9 +17,6 @@ from boto.s3.connection import OrdinaryCallingFormat
 import config
 from serverdaemon.logsetup import logger
 
-# This is the S3 bucket name for server builds:
-bucket_name = "ncl-teamcity"
-
 
 def sync_index():
     path = config.BUILD_PATH

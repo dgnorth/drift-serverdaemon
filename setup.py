@@ -80,12 +80,6 @@ setup_args = dict(
         exclude=["*.tests", "*.tests.*", "tests.*", "tests"]
     ),
     include_package_data=True,
-    install_requires=[
-        str(i.req)
-        for i in parse_requirements(
-            "requirements.txt", session=pip.download.PipSession()
-        )
-    ],
     cmdclass={
         'deploy': DeployCommand
     }
