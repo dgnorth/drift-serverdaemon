@@ -74,7 +74,7 @@ def log_event(event, description, details=None, severity="INFO", ref=None, tenan
 
     # try a few times in case the file is open by another process
     e = None
-    for i in xrange(5):
+    for i in range(5):
         try:
             with open(event_filename, 'r') as f:
                 events = json.load(f)
@@ -86,7 +86,7 @@ def log_event(event, description, details=None, severity="INFO", ref=None, tenan
 
     # try a few times in case the file is open by another process
     e = None
-    for i in xrange(5):
+    for i in range(5):
         try:
             with open(event_filename, 'w') as f:
                 json.dump(events, f)

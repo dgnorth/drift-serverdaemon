@@ -17,8 +17,7 @@ from threading import Thread
 import dateutil.parser
 import psutil
 
-import config
-from serverdaemon.config import config_file
+import serverdaemon.config as config
 from serverdaemon.logsetup import logger, log_event
 from serverdaemon.rest import ServerResource, get_auth_token, get_battle_api, get_machine_resource, get_root_endpoint
 from serverdaemon.s3 import get_index
@@ -69,7 +68,7 @@ def delete_old_builds():
             else:
                 build_number_by_ref[ref_name] = build_number
 
-    for ref_name, latest_build_number in build_number_by_ref.iteritems():
+    for ref_name, latest_build_number in build_number_by_ref.items():
         logger.debug("Latest build for ref '%s' is %s", ref_name, latest_build_number)
         ref_filename = ref_name.replace("/", ".")
         for folder in build_folders:
@@ -107,7 +106,7 @@ def _get_available_port(min_port, max_port):
     """Find an unused UPD port number."""
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
-    for i in xrange(250):
+    for i in range(250):
         port_no = min_port + i
         try:
             sock.bind(('', port_no))
@@ -184,7 +183,7 @@ class Daemon(object):
         logger.warning("Shutting down because: '%s'" % message)
         log_event("shutdown_servers", "Shutting down all servers because: '%s'" % message, severity="WARNING")
         kill_processes_by_ref(self.ref, self.tenant)
-        for pid, (q, battleserver_resource, status) in self.battleserver_instances.iteritems():
+        for pid, (q, battleserver_resource, status) in self.battleserver_instances.items():
             battleserver_resource.set_status("killed", {"status-reason": message})
         sys.exit(1)
 
@@ -198,7 +197,7 @@ class Daemon(object):
             out.close()
 
         #! get command line from config
-        command_line = config_file["command-line"]
+        command_line = config.config_file["command-line"]
         build_path = build_info["build"]
         executable_path = build_info["executable_path"]
         command, battleserver_resource = get_battleserver_command(build_path, executable_path, command_line, self.tenant)
@@ -242,7 +241,7 @@ class Daemon(object):
 
             index_file = get_index()
 
-            command_line = config_file["command-line"]
+            command_line = config.config_file["command-line"]
             status = "starting"
 
             build_path = build_info["build"]
@@ -315,7 +314,7 @@ class Daemon(object):
                     txt = "Done adding servers for ref '%s'. Added %s servers and am now running %s servers" % (self.ref, num_added, len(self.battleserver_instances))
                     log_event("servers_added", txt)
 
-                for pid, (q, battleserver_resource, status) in self.battleserver_instances.iteritems():
+                for pid, (q, battleserver_resource, status) in self.battleserver_instances.items():
                     try:
                         p = psutil.Process(pid)
                     except psutil.NoSuchProcess:
@@ -345,7 +344,7 @@ class Daemon(object):
                     if not self.battleserver_instances:
                         break
                     empty = True
-                    for pid, (q, battleserver_resource, status) in self.battleserver_instances.iteritems():
+                    for pid, (q, battleserver_resource, status) in self.battleserver_instances.items():
                         try:
                             line = q.get(timeout=.1)
                         except Empty:

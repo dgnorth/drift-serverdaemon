@@ -14,11 +14,10 @@ from serverdaemon.cleanlogs import upload_logs
 from serverdaemon.utils import get_ts
 from serverdaemon.logsetup import setup_logging, logger, log_event
 from serverdaemon import logsetup
-import serverdaemon.config as config
-from serverdaemon.config import config_file
 from serverdaemon.heartbeat import heartbeat_all_tenants
 from serverdaemon.syncbuilds import download_latest_builds
-from serverdaemon.runtasks import update_tasks
+#from serverdaemon.runtasks import update_tasks
+import serverdaemon.config as config
 
 
 def delete_old_builds():
@@ -33,6 +32,19 @@ def delete_all_builds():
     else:
         print("I didn't think so!")
         sys.exit(1)
+
+
+def run(ref, tenant_name):
+    build_info = get_manifest(ref)
+    if not build_info:
+        msg = "Build not found for ref '%s'" % ref
+        logger.error(msg)
+        sys.exit(1)
+    logger.info("RUNNING build %s", build_info)
+    build_path = build_info["build"]
+    d = daemon.Daemon(ref, tenant_name)
+    d.run()
+    logger.info("Exiting")
 
 
 def main():
@@ -57,6 +69,11 @@ def main():
     parser_deploy.add_argument("-f", "--force", action="store_true", help='Always download file (even if it already exists)')
 
     args = parser.parse_args()
+
+    if args.cmd is None:
+        parser.print_help()
+        sys.exit(1)
+
     logname = args.cmd
     tenant_name = getattr(args, "tenant", None)
     ref = getattr(args, "ref", None)
@@ -83,18 +100,7 @@ def main():
         logger.exception("Error! %s" % e)
 
     if args.cmd == "run":
-        index_file = get_index()
-        build_info = get_manifest(args.ref)
-        if not build_info:
-            msg = "Build not found for ref '%s'" % args.ref
-            logger.error(msg)
-            sys.exit(1)
-        logger.info("RUNNING build %s", build_info)
-        build_path = build_info["build"]
-        d = daemon.Daemon(args.ref, tenant_name)
-        d.run()
-        logger.info("Exiting")
-
+        run(args.ref, tenant_name)
     elif args.cmd == "syncbuilds":
         download_latest_builds(args.force)
     elif args.cmd == "clean":
@@ -108,7 +114,8 @@ def main():
     elif args.cmd == "heartbeat":
         heartbeat_all_tenants()
     elif args.cmd == "updateruntasks":
-        update_tasks()
+        logger.error("not yet implemented")
+        #update_tasks()
 
 
 if __name__ == "__main__":

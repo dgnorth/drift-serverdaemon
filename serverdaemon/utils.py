@@ -6,7 +6,7 @@ import boto.ec2
 import requests
 from driftconfig.util import get_domains
 
-import config
+import serverdaemon.config as config
 from serverdaemon.logsetup import logger
 
 ec2_metadata = "http://169.254.169.254/latest/meta-data/"
@@ -136,12 +136,12 @@ def get_tags():
             raise
     except requests.exceptions.RequestException as e:
         host_name = gethostname()
-        tier_name = "DEVNORTH"
+        tier_name = "LOCAL"
         logger.warning("Could not query EC2 metastore. Assuming tier is '%s'" % tier_name)
         #raise RuntimeError("Could not query EC2 metastore: %s" % e)
     ret = {
-        "tier": "DEVNORTH",
-        "drift-product_name": "dg-driftplugin",
+        "tier": tier_name,
+        "drift-product_name": "mw-dev",
         "drift-group_name": "dev",
     }
     logger.warning("Not running on EC2. Returning hard coded temp values for tags: %s" % repr(ret))

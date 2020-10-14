@@ -14,7 +14,7 @@ import dateutil.parser as parser
 from boto.s3 import connect_to_region
 from boto.s3.connection import OrdinaryCallingFormat
 
-import config
+import serverdaemon.config as config
 from serverdaemon.logsetup import logger
 
 
