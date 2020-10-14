@@ -73,7 +73,7 @@ def get_ts():
     domains = get_domains().values()
     if len(domains) != 1:
         raise RuntimeError("Unexpected number of domains in drift config: %s" % len(domains))
-    ts = domains[0]["table_store"]
+    ts = list(domains)[0]["table_store"]
     return ts
 
 def get_num_processes(ref, tenant):

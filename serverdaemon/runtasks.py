@@ -39,7 +39,7 @@ def remove_ref_task(scheduler, ref):
         rootFolder.DeleteTask(task_id, 0)
 
         logger.info("  Killing running processes ")
-        from daemon import kill_processes_by_ref
+        from serverdaemon.daemon import kill_processes_by_ref
         kill_processes_by_ref(ref[0], ref[1])
         logger.info("Done removing task for ref '%s'" % str(ref))
 
