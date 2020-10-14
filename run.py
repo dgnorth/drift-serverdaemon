@@ -26,7 +26,7 @@ def delete_old_builds():
 
 
 def delete_all_builds():
-    yes = raw_input("Are you sure you want to delete all builds from this machine? [Y/n]")
+    yes = input("Are you sure you want to delete all builds from this machine? [Y/n]")
     if yes == "Y":
         logger.warning("Deleting all builds...")
         daemon.delete_all_builds()
