@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import os, sys
 sys.dont_write_bytecode = True # no pyc files please
 import argparse

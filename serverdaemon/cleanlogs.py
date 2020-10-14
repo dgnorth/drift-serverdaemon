@@ -9,7 +9,7 @@ import zipfile
 
 import boto3
 
-import config
+import serverdaemon.config as config
 from serverdaemon.logsetup import logger
 
 # This is the S3 bucket name for server builds:

@@ -9,7 +9,7 @@ import sys
 
 import psutil
 
-import config
+import serverdaemon.config as config
 from serverdaemon.logsetup import logger, flush_events
 from serverdaemon.rest import get_machine_resource, get_battle_api
 from serverdaemon.utils import get_ts, get_tags

@@ -7,7 +7,7 @@ import json
 
 import requests
 
-import config
+import serverdaemon.config as config
 from serverdaemon.logsetup import logger
 from serverdaemon.utils import get_machine_info, get_ts
 
@@ -146,7 +146,7 @@ class ServerResource(RESTResource):
         if not url:
             url = get_root_endpoint(tenant) + "/servers"
             create = True
-        return RESTResource.__init__(self, session, url, tenant, info, create=create)
+        RESTResource.__init__(self, session, url, tenant, info, create=create)
 
     def set_status(self, status, new_details):
         details = self.get().json()["details"]
@@ -159,7 +159,7 @@ class ServerResource(RESTResource):
 
 class MachineResource(RESTResource):
     def __init__(self, session, url, tenant, info=None, create=True):
-        return RESTResource.__init__(self, session, url, tenant, info, create=create)
+        RESTResource.__init__(self, session, url, tenant, info, create=create)
 
     def heartbeat(self):
         self.put({})

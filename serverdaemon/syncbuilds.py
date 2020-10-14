@@ -4,7 +4,7 @@ import shutil
 import sys
 from zipfile import ZipFile
 
-from serverdaemon import config
+import serverdaemon.config as config
 from serverdaemon.logsetup import logger, log_event
 from serverdaemon.s3 import get_manifest, is_build_installed, download_build
 from serverdaemon.utils import get_ts
@@ -51,7 +51,6 @@ def install_build(zipfile_name, ignore_if_exists=False):
     zipfile_path = os.path.abspath(zipfile_path)
     if not os.path.exists(zipfile_path):
         raise RuntimeError("Zipfile '{}' not found!".format(zipfile_path))
-
 
     with ZipFile(zipfile_path) as zipfile:
         update_state(
@@ -121,6 +120,5 @@ def download_latest_builds(force=False):
         logger.info("Done downloading '%s' to %s" % (build_info["archive"], local_filename))
 
         install_build(local_filename)
-
 
         log_event("install_build_complete", "Finished installing build for ref '%s'" % ref, details=log_details, tenant_name=tenant)
