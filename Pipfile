@@ -12,7 +12,7 @@ requests = "*"
 psutil = "*"
 jsonschema = "*"
 python-driftconfig = "*"
-pypiwin32 = "*"
+#pypiwin32 = "*"
 tabulate = "*"
 six = "*"
 
