@@ -11,6 +11,7 @@ from serverdaemon.logsetup import logger
 
 ec2_metadata = "http://169.254.169.254/latest/meta-data/"
 
+DEFAULT_TIER = "LOCAL"
 
 def get_local_refs():
     ts = get_ts()
@@ -99,7 +100,6 @@ def get_num_processes(ref, tenant):
     ret = int(rows[0]['processes_per_machine'])
     return ret
 
-
 def get_region():
     #return 'eu-west-1' #!!!!!!!!!
     try:
@@ -136,9 +136,9 @@ def get_tags():
             raise
     except requests.exceptions.RequestException as e:
         host_name = gethostname()
-        tier_name = "LOCAL"
+        tier_name = DEFAULT_TIER
         logger.warning("Could not query EC2 metastore. Assuming tier is '%s'" % tier_name)
-        #raise RuntimeError("Could not query EC2 metastore: %s" % e)
+        # raise RuntimeError("Could not query EC2 metastore: %s" % e)
     ret = {
         "tier": tier_name,
         "drift-product_name": "mw-dev",
@@ -153,7 +153,7 @@ def get_tier_name():
     Get tier name from an AWS EC2 tag
     """
     tags = get_tags()
-    tier_name = str(tags.get("tier", "DEVNORTH"))
+    tier_name = str(tags.get("tier", DEFAULT_TIER))
 
     return tier_name
 
