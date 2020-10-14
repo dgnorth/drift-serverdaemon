@@ -14,7 +14,7 @@ jsonschema = "*"
 python-driftconfig = "*"
 #pypiwin32 = "*"
 tabulate = "*"
-six = "*"
+python-dateutil = "*"
 
 [requires]
 python_version = "3.8"
